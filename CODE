@@ -1,0 +1,32 @@
+const int trigPin = 10; // Defines the data pins of the ultrasonic
+const int echoPin = 9;
+const int buzzPin = 2;  // Defines the buzzer pin
+
+void setup() {
+    pinMode(trigPin, OUTPUT); // Sets trig pin to have output pulses
+    pinMode(echoPin, INPUT);  // Sets echo pin to be input and get the pulse width
+    pinMode(buzzPin, OUTPUT); // Sets buzz pin as output to control the sound
+}
+
+void loop() {
+    int duration, distance; // The duration will be the input pulse width and distance will be the distance to the obstacle in centimeters
+
+    digitalWrite(trigPin, HIGH); // The output pulse with 1ms width on trigPin
+    delay(1);
+    digitalWrite(trigPin, LOW);
+
+    duration = pulseIn(echoPin, HIGH); // Measures the pulse input in the echo pin
+    distance = (duration / 2) / 29.1;  // Distance is half the duration divided by 29.1 (from datasheet)
+
+    // If the distance is less than 0.1 meter and more than 0 (0 or less means over range)
+    if (distance <= 10 && distance >= 0) {
+        // It will trigger the Buzzer
+        digitalWrite(buzzPin, HIGH);
+    } else {
+        // Will not sound
+        digitalWrite(buzzPin, LOW);
+    }
+
+    // Waits 50 milliseconds
+    delay(50);
+}
